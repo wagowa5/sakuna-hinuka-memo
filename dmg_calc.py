@@ -29,7 +29,7 @@ def main():
     ap = argparse.ArgumentParser(description="Quick damage calculator (7 RNG outcomes).")
     ap.add_argument("--atk", type=int, required=True, help="ATK")
     ap.add_argument("--mult", type=float, required=True, help="multiplier (e.g. 0.25 normal, 1.6 skill)")
-    ap.add_argument("--def", type=float, help="enemy DEF (original DEF before defdown). Provide either --def or --def_eff.")
+    ap.add_argument("--def_enemy", type=float, help="enemy DEF (original DEF before defdown). Provide either --def or --def_eff.")
     ap.add_argument("--def_eff", type=float, help="enemy effective DEF (after defdown). Provide either --def or --def_eff.")
     ap.add_argument("--defdown", type=float, default=0.0, help="DEF down rate (e.g. 0.165). Used only if --def is given.")
     ap.add_argument("--k", type=float, default=27000.0, help="K in s(DEF_eff)=1/(1+DEF_eff/K). default 27000")
@@ -37,10 +37,10 @@ def main():
                     help="RNG set. default 097_103 (=0.97..1.03)")
     args = ap.parse_args()
 
-    if args.def_eff is None and args.def is None:
-        raise SystemExit("ERROR: provide --def or --def_eff")
-    if args.def_eff is not None and args.def is not None:
-        raise SystemExit("ERROR: provide only one of --def or --def_eff")
+    if args.def_eff is None and args.def_enemy is None:
+        raise SystemExit("ERROR: provide --def_enemy or --def_eff")
+    if args.def_eff is not None and args.def_enemy is not None:
+        raise SystemExit("ERROR: provide only one of --def_enemy or --def_eff")
 
     rs = R_097_103 if args.random == "097_103" else R_99_105_OVER_102
 
@@ -48,7 +48,7 @@ def main():
         def_eff = float(args.def_eff)
         def_orig = None
     else:
-        def_orig = float(args.def)
+        def_orig = float(args.def_enemy)
         def_eff = def_orig * (1.0 - float(args.defdown))
 
     b = base_damage(float(args.atk), float(args.mult), def_eff, float(args.k))
