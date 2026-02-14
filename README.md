@@ -24,5 +24,5 @@ python estimate_def.py --atk 2002 --mult 0.25 --damages 413,417,421,426,430,434,
 # 推測ダメージ出力
 
 ```
-python dmg_calc.py --atk 2219 --mult 0.25 --def 780
+python dmg_calc.py --atk 2219 --mult 0.25 --def_enemy 780
 ```
